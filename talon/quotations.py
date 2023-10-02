@@ -135,7 +135,7 @@ RE_ORIGINAL_MESSAGE = re.compile(u'[\s]*[-]+[ ]*({})[ ]*[-]+'.format(
         'Oprindelig meddelelse',
     ))), re.I)
 
-RE_FROM_COLON_OR_DATE_COLON = re.compile(u'((_+\r?\n)?[\s]*:?[*]?({})[\s]?:([^\n$]+\n){{1,2}}){{2,}}'.format(
+RE_FROM_COLON_OR_DATE_COLON = re.compile(u'(((_+\r?\n)?[\s]*:?[*]?({})[\s]?:)([^\n$]+\n){{1,2}}){{2,}}'.format(
     u'|'.join((
         # "From" in different languages.
         'From', 'Van', 'De', 'Von', 'Fra', u'Från',
