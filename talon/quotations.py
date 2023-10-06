@@ -5,7 +5,6 @@ The module's functions operate on message bodies trying to extract
 original messages (without quoted messages)
 """
 
-from lxml import etree
 from __future__ import absolute_import
 import regex as re
 from copy import deepcopy
