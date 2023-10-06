@@ -16,6 +16,8 @@ from talon.utils import (get_delimiter, html_tree_to_text, html_document_fromstr
 from talon import html_quotations
 from six.moves import range
 import six
+from logging import getLogger
+log = getLogger(__name__)
 
 
 RE_FWD = re.compile("^[-]+[ ]*Forwarded message[ ]*[-]+\s*$", re.I | re.M)
@@ -575,8 +577,10 @@ def _extract_from_html(msg_body):
     if msg_body.strip() == b'':
         return msg_body
 
+    log.info('extract html: {}'.format(msg_body))
     msg_body = msg_body.replace(b'\r\n', b'\n')
     msg_body = re.sub(r'\<\?xml.+\?\>|\<\!DOCTYPE.+]\>', '', msg_body)
+    log.info('extract html replaced sub: {}'.format(msg_body))
     html_tree = html_document_fromstring(msg_body)
 
     if html_tree is None:
@@ -612,12 +616,16 @@ def _extract_from_html(msg_body):
              for line in lines]
 
     # Use plain text quotation extracting algorithm
+    log.info('extract html lines: {}'.format("\n".join(lines)))
     markers = mark_message_lines(lines)
+    log.info('extract html markers: {}'.format(markers))
     return_flags = []
     process_marked_lines(lines, markers, return_flags)
     lines_were_deleted, first_deleted, last_deleted = return_flags
+    log.info('extract html lines_were_deleted: {} first_deleted: {} last_deleted: {}'.format(lines_were_deleted, first_deleted, last_deleted))
 
     if not lines_were_deleted and not cut_quotations:
+        log.info('return msg body: {}'.format(msg_body))
         return msg_body
 
     if lines_were_deleted:
@@ -634,6 +642,7 @@ def _extract_from_html(msg_body):
     if _readable_text_empty(html_tree_copy):
         return msg_body
 
+    log.info('return msg body last')
     return html.tostring(html_tree_copy)
 
 
