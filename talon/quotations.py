@@ -582,6 +582,9 @@ def _extract_from_html(msg_body):
     msg_body = re.sub(r'\<\?xml.+\?\>|\<\!DOCTYPE.+]\>', '', msg_body)
     log.info('extract html replaced sub: {}'.format(msg_body))
     html_tree = html_document_fromstring(msg_body)
+    log.info('extract html tree 1: {}'.format(html_tree))
+    log.info('extract html tree 1 class: {}'.format(html_tree.__class__))
+    log.info('extract html tree 2 class: {}'.format(type(html_tree)))
 
     if html_tree is None:
         return msg_body
