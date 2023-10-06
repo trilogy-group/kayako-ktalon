@@ -16,6 +16,9 @@ CHECKPOINT_PATTERN = re.compile(CHECKPOINT_PREFIX + '\d+' + CHECKPOINT_SUFFIX)
 QUOTE_IDS = ['OLK_SRC_BODY_SECTION']
 RE_FWD = re.compile("^[-]+[ ]*Forwarded message[ ]*[-]+$", re.I | re.M)
 
+from logging import getLogger
+from lxml import html, etree
+log = getLogger(__name__)
 
 def add_checkpoint(html_note, counter):
     """Recursively adds checkpoints to html tree.
@@ -176,6 +179,7 @@ def cut_from_block(html_message):
          "//*[starts-with(mg:text_content(), 'Date:')]"))
 
     if block:
+        log.info('found from block')
         block = block[-1]
         parent_div = None
         while block.getparent() is not None:
@@ -205,6 +209,8 @@ def cut_from_block(html_message):
                 # remove the last sibling (or the
                 # From block if no siblings)
                 if block is not None:
+                    log.info('parent: {} \nremove block: {}'.format(etree.tostring(parent, pretty_print=True),
+                                                                    etree.tostring(block, pretty_print=True)))
                     parent.remove(block)
 
                 return True
