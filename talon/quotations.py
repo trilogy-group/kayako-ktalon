@@ -5,6 +5,7 @@ The module's functions operate on message bodies trying to extract
 original messages (without quoted messages)
 """
 
+from lxml import etree
 from __future__ import absolute_import
 import regex as re
 from copy import deepcopy
@@ -582,9 +583,7 @@ def _extract_from_html(msg_body):
     msg_body = re.sub(r'\<\?xml.+\?\>|\<\!DOCTYPE.+]\>', '', msg_body)
     log.info('extract html replaced sub: {}'.format(msg_body))
     html_tree = html_document_fromstring(msg_body)
-    log.info('extract html tree 1: {}'.format(html_tree))
-    log.info('extract html tree 1 class: {}'.format(html_tree.__class__))
-    log.info('extract html tree 2 class: {}'.format(type(html_tree)))
+    log.info('extract html tree 1: {}'.format(etree.tostring(html_tree, pretty_print=True)))
 
     if html_tree is None:
         return msg_body
@@ -597,6 +596,7 @@ def _extract_from_html(msg_body):
                       html_quotations.cut_from_block(html_tree)
                       )
     html_tree_copy = deepcopy(html_tree)
+    log.info('extract html tree 2: {}'.format(etree.tostring(html_tree_copy, pretty_print=True)))
 
     number_of_checkpoints = html_quotations.add_checkpoint(html_tree, 0)
     quotation_checkpoints = [False] * number_of_checkpoints
