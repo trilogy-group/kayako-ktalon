@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 
 # In order to publish updates, please check the README,
